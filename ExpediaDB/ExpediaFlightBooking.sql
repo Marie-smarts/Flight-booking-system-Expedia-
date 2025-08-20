@@ -26,11 +26,12 @@ CREATE TABLE `airline` (
   `AirlineId` int NOT NULL AUTO_INCREMENT,
   `AirlineName` varchar(100) DEFAULT NULL,
   `AirlineLogo` varchar(100) DEFAULT NULL,
+  `AirlineCode` varchar(3) DEFAULT NULL,
   `Country_Id_` int DEFAULT NULL,
   PRIMARY KEY (`AirlineId`),
   KEY `Country_Id__idx` (`Country_Id_`),
   CONSTRAINT `Country_Id_` FOREIGN KEY (`Country_Id_`) REFERENCES `country` (`CountryId`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,6 +40,7 @@ CREATE TABLE `airline` (
 
 LOCK TABLES `airline` WRITE;
 /*!40000 ALTER TABLE `airline` DISABLE KEYS */;
+INSERT INTO `airline` VALUES (5,'Kenya Airways','KQ.jpg','KQ',5);
 /*!40000 ALTER TABLE `airline` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -406,6 +408,26 @@ UNLOCK TABLES;
 --
 -- Dumping routines for database 'expediaflightbooking'
 --
+/*!50003 DROP PROCEDURE IF EXISTS `sp_checkAirline` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_checkAirline`( $AirlineId INT, $AirlineName VARCHAR(100),$AirlineCode VARCHAR(3))
+BEGIN
+	SELECT * FROM `Airline`
+    WHERE `AirlineId` != $AirlineId AND (`AirlineName` = $AirlineName AND `AirlineCode` = $AirlineCode);
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `sp_checkAirport` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -779,39 +801,38 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_filterAirline`(
-
-    $AirlineName VARCHAR(100),
-    $CountryName VARCHAR(100)
-
-)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_filterAirline`($AirlineName VARCHAR(100),$CountryName VARCHAR(100),$AirlineCode VARCHAR(3))
 BEGIN
 
-	IF ($CountryName = '' AND $AirlineName = '') THEN
-    
-		SELECT a.AirlineId,a.AirlineName,a.AirlineLogo,c.CountryName
-		FROM `Airline` a
-		JOIN `Country` ON c.CountryName = a.Country_Id_
-        ORDER BY CountryName,AirlineName;
-    
-    ELSE
+	IF $AirlineName = '' AND $CountryName = '' AND $AirlineCode = ''THEN
 
-		IF $CountryName = '' THEN
-			SET $CountryName ='@@@@';
-		END IF;
-		
-		IF $AirlineName = '' THEN
-			SET $AirlineName ='@@@@';
-		END IF;
-		
-		SELECT a.AirlineId,a.AirlineName,a.AirlineLogo,c.CountryName
+		SELECT a.AirlineId,a.AirlineName,a.AirlineCode,a.AirlineLogo,c.CountryName
 		FROM `Airline` a
-		JOIN `Country` c ON c.CountryId = a.Country_Id_
+		JOIN `Country` c ON a.Country_Id_ = c.CountryId
+		ORDER BY CountryName,AirlineName,AirlineCode;
+		 
+	ELSE
+
+		IF $AirlineName = ''THEN
+			SET $AirlineName = '@@@@';
+		END IF;
+		
+		IF $CountryName = '' THEN
+			SET $CountryName = '@@@@';
+		END IF;
+		
+		IF $AirlineCode = '' THEN
+			SET $AirlineCode = '@@@';
+		END IF;
+		SELECT a.AirlineId,a.AirlineName,a.AirlineCode,a.AirlineLogo,c.CountryName
+		FROM `Airline` a
+		JOIN `Country` c ON a.Country_Id_ = c.CountryId
 		WHERE c.CountryName LIKE CONCAT('%',$CountryName,'%')
 		OR a.AirlineName LIKE CONCAT('%',$AirlineName,'%')
-		ORDER BY CountryName,AirlineName;
-        
+		OR a.AirlineCode LIKE CONCAT('%',$AirlineCode,'%')
+		ORDER BY CountryName,AirlineName,AirlineCode;
 	END IF;
+		
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -925,11 +946,11 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_getAirline`($AirlineId INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_getAirline`()
 BEGIN
 
 	SELECT * FROM `Airline`
-    WHERE `AirlineId` = $AirlineId;
+    ORDER BY `AirlineName`;
     
 END ;;
 DELIMITER ;
@@ -1135,38 +1156,28 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_saveAirline`(in
-
-	$AirlineId INT,
-    $AirlineName VARCHAR(100),
-    $AirlineLogo VARCHAR(100),
-    $CountryId INT
-
-)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_saveAirline`($AirlineId INT,$AirlineName VARCHAR(100),$AirlineLogo VARCHAR(100),$CountryId INT,$AirlineCode VARCHAR(3))
 BEGIN
 
-	IF $AirlineId = 0 THEN
+	IF NOT EXISTS(SELECT * FROM `Airline` WHERE `AirlineName` = $AirlineName AND `AirlineCode` = $AirlineCode) THEN
     
-		IF NOT EXISTS (SELECT * FROM `Airline` WHERE `AirlineName` = $AirlineName)THEN
-        
-			INSERT INTO `Airline`(`AirlineName`,`AirlineLogo`,`Country_Id_`)
-            VALUES($AirlineName, $AirlineLogo,$CountryId);
-		
-        END IF;
-    
+		INSERT INTO `Airline` (`AirlineName`, `AirlineCode`,`AirlineLogo`,`Country_Id_`)
+        VALUES ($AirlineName,$AirlineCode,$AirlineLogo,$CountryId);
     ELSE
     
-		IF NOT EXISTS (SELECT * FROM `Airline` WHERE `AirlineName` = $AirlineName AND `AirlineId` != $AirlineId) THEN
-        
-			UPDATE `Airline`
-            SET `AirlineName` = $AirlineName,
-				`AirlineLogo` = $AirlineLogo,
-                `Country_Id_` = $CountryId
-			WHERE `AirlineId` = $AirlineId;
-        
-        END IF;
+    IF NOT EXISTS(SELECT * FROM `Airline` WHERE  (`AirlineName` = $AirlineName AND `AirlineCode` = $AirlineCode) AND `AirlineId` != $AirlineId) THEN
+    
+		UPDATE `Airline`
+        SET `AirlineName` = $AirlineName,
+			`AirlineCode` = $AirlineCode,
+            `AirlineLogo` = $AirlineLogo,
+            `Country_Id_` = $CountryId
+		WHERE `AirlineId` = $AirlineId;
+	END IF;
+				
     
     END IF;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1729,4 +1740,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-08-19 23:16:41
+-- Dump completed on 2025-08-20 13:05:45
