@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="CSS/bootstrap.min.css"> <!--This is the bootstrap css file-->
+    <link rel="stylesheet" href="CSS/all.min.css"><!--This is font awesome css file-->
+    <title>Xpedia - Manage Countries</title>
+</head>
+<body>
+    <div class="container-fluid">
+
+       <table class="table table-sm table-striped table-hover">
+            <thead>
+                <th>#</th>
+                <th>Country Name</th>
+                <th>Cities</th>
+                <th>Airports</th>
+                <th>Airline</th>
+                <th></th><!--This is for editing the country-->
+            </thead>
+
+            <tbody>
+
+            </tbody>
+       </table>
+
+       <!--Button for saving country-->
+       <button class="btn btn-sm btn-success" id="addnewcountry"><i class="fas fa-plus"></i> Add New Country</button>
+
+    </div>
+    
+    <!--Model for country details-->
+    <div class="modal" tabindex="-1" role="dialog" id="countryDetailsModal">
+
+        <div class="modal-dialog" role="document">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+
+                    <h5 class="modal-title">Country Details</h5>
+
+                </div>
+
+                <div class="modal-body">
+
+                    <div id="notifications"></div>
+
+                    <input type="hidden" name="contryName" id="CountryId" value="0">
+
+                    <div class="form-group">
+                        <label for="CountryName">CountryName</label>
+                        <input type="text" name="CountryName" id="CountryName" class="form-control form-control-sm">
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-success btn-sm" id="saveCountry"> 
+                        <i class="fas fa-save fa-lg"></i> 
+                        Save changes
+                    </button>
+
+                    <button type="button" class="btn btn-outline-danger btn-sm" id="closemodal" data-dismiss="modal" >
+                        <i class="fas fa-times fa-sm"></i>
+                        Close
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+
+<script src="JS/jquery-3.7.1.js"></script> <!--This is the js for JQUERY file -->
+<script src="JS/bootstrap.min.js"></script> <!--This is the JS bootstrap file-->
+<script src="JS/country.js"></script>
+
+</html>       
