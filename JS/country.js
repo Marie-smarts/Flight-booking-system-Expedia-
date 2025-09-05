@@ -43,7 +43,7 @@ $(document).ready(function(){
                             notifications.html("<div class='alert alert-success' role='alert' >Country saved successfully.</div>")
                             countrynamefield.val("")
                             countrynamefield.focus()
-
+ 
 
                         }else if(data.status == "exists"){
 
