@@ -224,7 +224,7 @@ CREATE TABLE `country` (
   `CountryId` int NOT NULL AUTO_INCREMENT,
   `CountryName` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`CountryId`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -233,7 +233,7 @@ CREATE TABLE `country` (
 
 LOCK TABLES `country` WRITE;
 /*!40000 ALTER TABLE `country` DISABLE KEYS */;
-INSERT INTO `country` VALUES (5,'Kenya'),(6,'Uganda'),(7,'Tanzania'),(9,'Burundi'),(10,'South Africa'),(11,'Nigeria');
+INSERT INTO `country` VALUES (5,'Kenya'),(6,'Uganda'),(7,'Tanzania'),(9,'Burundi'),(10,'South Africa'),(11,'Nigeria'),(12,'Botswana'),(13,'Zimbambwe'),(14,'zimbabwe'),(15,'Algeria'),(16,'Zambia'),(17,'Ethiopia'),(18,'Egypt');
 /*!40000 ALTER TABLE `country` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -250,7 +250,7 @@ CREATE TABLE `currency` (
   `DefaultCurrency` varchar(3) DEFAULT NULL,
   `ExchangeRate` int DEFAULT NULL,
   PRIMARY KEY (`CurrencyId`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -259,6 +259,7 @@ CREATE TABLE `currency` (
 
 LOCK TABLES `currency` WRITE;
 /*!40000 ALTER TABLE `currency` DISABLE KEYS */;
+INSERT INTO `currency` VALUES (3,'Ksh','USD',129);
 /*!40000 ALTER TABLE `currency` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -307,7 +308,7 @@ CREATE TABLE `gender` (
   `GenderId` int NOT NULL AUTO_INCREMENT,
   `Gender` varchar(8) DEFAULT NULL,
   PRIMARY KEY (`GenderId`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -316,6 +317,7 @@ CREATE TABLE `gender` (
 
 LOCK TABLES `gender` WRITE;
 /*!40000 ALTER TABLE `gender` DISABLE KEYS */;
+INSERT INTO `gender` VALUES (3,'Female'),(4,'Male');
 /*!40000 ALTER TABLE `gender` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -394,7 +396,7 @@ CREATE TABLE `paymentmethod` (
   `PaymentMethodId` int NOT NULL AUTO_INCREMENT,
   `PaymentType` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`PaymentMethodId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -403,12 +405,61 @@ CREATE TABLE `paymentmethod` (
 
 LOCK TABLES `paymentmethod` WRITE;
 /*!40000 ALTER TABLE `paymentmethod` DISABLE KEYS */;
+INSERT INTO `paymentmethod` VALUES (1,'Cash');
 /*!40000 ALTER TABLE `paymentmethod` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
+-- Dumping events for database 'expediaflightbooking'
+--
+
+--
 -- Dumping routines for database 'expediaflightbooking'
 --
+/*!50003 DROP PROCEDURE IF EXISTS `ps_checkFlightSupply` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `ps_checkFlightSupply`($FlightId INT, FlightNo VARCHAR(100))
+BEGIN
+
+	SELECT * FROM `flightsupply`
+    WHERE `FlightId` != $FlightId AND `FlightNo` = $FlightNo ;
+    
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_BookingType` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_BookingType`($BookingTypeId INT, $BookingName VARCHAR(100))
+BEGIN
+
+	SELECT * FROM `bookingtype`
+    WHERE `BookingTypeId` != $BookingTypeId AND `BookingName` = $BookingName;
+    
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `sp_checkAirline` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -443,6 +494,94 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_checkAirport`($AirportId INT, $A
 BEGIN
 		SELECT * FROM `airport` 
         WHERE `AirportId` != $AirportId AND (`AirportCode` = $AirportCode AND `AirportName` = $AirportName);
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_checkBooking` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_checkBooking`($BookingId INT)
+BEGIN
+
+	SELECT * FROM `booking`
+    WHERE `BookingId` != $BookingId;
+    
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_checkBookingClass` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_checkBookingClass`($BookingClassId INT, $TypeName VARCHAR(100))
+BEGIN
+
+	SELECT * FROM `bookingclass`
+    WHERE `BookingClassId` != $BookingClassId AND `TypeName` = $TypeName;
+    
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_checkBookingSupply` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_checkBookingSupply`($BookingSupplyId INT)
+BEGIN
+
+	SELECT * FROM `bookingsupply`
+    WHERE `BookingIdSupply` != $BookingSupplyId;
+
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_checkBookingType` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_checkBookingType`($BookingTypeId INT, $BookingName VARCHAR(100))
+BEGIN
+
+	SELECT * FROM `bookingtype`
+    WHERE `BookingTypeId` != $BookingTypeId AND `BookingName` = $BookingName;
+    
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -491,6 +630,48 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_checkCurrency` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_checkCurrency`($CurrencyId INT, $CurrencyName VARCHAR(3))
+BEGIN
+
+	SELECT * FROM `Currency`
+    WHERE `CurrencyId` != $CurrencyId AND `CurrencyName` = $CurrencyName;
+    
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_checkGender` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_checkGender`($GenderId INT, $Gender VARCHAR(8))
+BEGIN
+	SELECT * FROM `gender`
+    WHERE `GenderId` != $GenderId AND `Gender` = $Gender;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `sp_checkIdentification` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -505,6 +686,50 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_checkIdentification`($Identifica
 BEGIN
 	SELECT * FROM `Identification`
     WHERE `IdentificationId` != $IdentificationId AND `DocumentName` = $DocumentName;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_checkPassengerManifest` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_checkPassengerManifest`($PassengerId INT)
+BEGIN
+
+	SELECT * FROM `passengermanifest`
+    WHERE `PassengerId` != $PassengerId;
+    
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_checkPaymentMethod` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_checkPaymentMethod`($PaymentMethodId INT,$PaymentType VARCHAR(100))
+BEGIN
+
+	SELECT * FROM `paymentmethod` 
+    WHERE `PaymentMethodId` != $PaymentMethodId AND `PaymentType` = $PaymentType;
+    
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -803,7 +1028,7 @@ DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_deletePaymentMethod`($PaymentMethodId INT)
 BEGIN
 
-	DELETE FROM `PaymentMethod`
+	DELETE FROM `paymentmethod`
     WHERE `PaymentMethodId` = $PaymentMethodId;
     
 END ;;
@@ -916,6 +1141,179 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_filterBooking` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_filterBooking`($BookingClassType VARCHAR(100), $CurrencyName VARCHAR(3),$FlightNo VARCHAR(100),$PaymentType VARCHAR(100))
+BEGIN
+
+	IF ($BookingClassType = "" AND ($CurrencyName = "" AND ($CurrencyName = "" AND ($FlightNo = "" AND $PaymetnType = "")))) THEN
+    
+		SELECT b.BookingId, b.BookingName,c.CurrencyName,f.FlightNo,p.PaymentType
+		FROM `booking` b
+		JOIN `currency` c ON c.CurrencyId = b.Currency_Id
+		JOIN `flightsupply` f ON f.FlightId = b.Flight_Id
+		JOIN `paymentmethod` p ON p.PaymentMethodId = b.PaymentMethod_Id
+        ORDER BY BookingId, BookingName, CurrencyName, FlightNo, PaymentType;
+
+    ELSE
+	
+		IF $BookingClassType = "" THEN
+			SET $BookingClassType = "@@@@";
+        END IF;
+        
+        IF $CurrencyName = "" THEN 
+			SET $CurrencyName = "@@@";
+        END IF;
+        
+        IF $FlightNo = "" THEN
+			SET $FlightNo = "@@@@";
+        END IF;
+        
+        IF $PaymentType = "" THEN 
+			SET $PaymentType = "@@@@";
+        END IF;
+
+		SELECT b.BookingId, b.BookingName,c.CurrencyName,f.FlightNo,p.PaymentType
+		FROM `booking` b
+		JOIN `currency` c ON c.CurrencyId = b.Currency_Id
+		JOIN `flightsupply` f ON f.FlightId = b.Flight_Id
+		JOIN `paymentmethod` p ON p.PaymentMethodId = b.PaymentMethod_Id
+		WHERE b.BookingName LIKE CONCAT("%",$BookingClassType,"%")
+		OR c.CurrencyName LIKE CONCAT("%",$CurrencyName,"%")
+		OR f.FlightNo LIKE CONCAT("%",$FlightNo,"%")
+		OR p.PaymentType LIKE CONCAT("%",$PaymentType,"%")
+		ORDER BY BookingId, BookingName, CurrencyName, FlightNo, PaymentType;
+    
+	END IF;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_filterBookingClass` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_filterBookingClass`($TypeName VARCHAR(100))
+BEGIN
+
+	IF $TypeName = "" THEN
+		
+		SELECT * FROM `bookingclass`
+        ORDER BY `BookingClassId`;
+        
+	ELSE
+    
+		SELECT * FROM `bookingclass`
+		WHERE `TypeName` LIKE CONCAT("%",$TypeName,"%");
+        
+    END IF;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_filterBookingSupply` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_filterBookingSupply`($FlightNo VARCHAR(100),$BookingClass VARCHAR(100), $Currency VARCHAR (3) )
+BEGIN
+
+	IF ($FlightNo = "" AND ($BookingClass = "" AND $Currency = "")) THEN
+		
+        SELECT b.BookingSupplyId, f.FlightNo, o.BookingClassId, b.NoOfSeats, b.Price, c.CurrencyName
+		FROM `bookingsupply` b
+		JOIN `flightsupply` f ON f.FlightId = b.FlightId
+		JOIN `bookingclass` o ON o.BookingClassId = b.BookingClassId
+		JOIN `Currency` c ON c.CurrencyId = b.CurrencyId
+        ORDER BY BookingSupplyId, FlightNo, TypeName, NoOfSeats, Price, CurrencyName; 
+    
+
+	ELSE
+
+		IF $FlightNo = "" THEN
+			SET $FlightNo = "@@@@";
+		END IF;
+		
+		IF $BookingClass = "" THEN
+			SET $BookingClass = "@@@@";
+		END IF;
+		
+		IF $Currency = "" THEN
+			SET $Currency = "@@@";
+		END IF;
+			
+			
+		SELECT b.BookingSupplyId, f.FlightNo, o.BookingClassId, b.NoOfSeats, b.Price, c.CurrencyName
+		FROM `bookingsupply` b
+		JOIN `flightsupply` f ON f.FlightId = b.FlightId
+		JOIN `bookingclass` o ON o.BookingClassId = b.BookingClassId
+		JOIN `Currency` c ON c.CurrencyId = b.CurrencyId
+		WHERE f.FlightNo LIKE CONCAT("%",$FlightNo,"%")
+		OR o.TypeName LIKE CONCAT("%",$BookingClass,"%")
+		OR c.CurrencyName LIKE CONCAT("%",$Currency,"%")
+		ORDER BY BookingSupplyId, FlightNo, TypeName, NoOfSeats, Price, CurrencyName; 
+        
+	END IF;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_filterBookingType` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_filterBookingType`($BookingName VARCHAR(100))
+BEGIN
+
+	IF $BookingName = "" THEN
+    
+		SELECT * FROM `bookingtype`
+        ORDER BY `BookingName`;
+    
+    ELSE
+    
+		SELECT * FROM `bookingtype`
+		WHERE `BookingName` LIKE CONCAT("%",$BookingName,"%");
+		
+	END IF;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `sp_filterCities` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -957,6 +1355,116 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_filterCurrency` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_filterCurrency`($CurrencyName VARCHAR(3))
+BEGIN
+
+	IF $CurrencyName = '' THEN
+		SELECT * FROM `Currency`
+        ORDER BY CurrencyId;
+	ELSE
+		SELECT*FROM `Currency`
+        WHERE `CurrencyName` LIKE CONCAT ('%',$CurrencyName,'%')
+        ORDER BY CurrencyId;
+	END IF;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_filterFlightSupply` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_filterFlightSupply`($FlightNo VARCHAR(100), $AirlineName VARCHAR(100), $DepartureCity VARCHAR(100), $DestinationCity VARCHAR(100))
+BEGIN
+
+	IF ($FlightNo ="" AND ($AirlineName = "" AND ($DestinationCity = "" AND $DepartureCity = ""))) THEN
+    
+		SELECT f.FlightId, f.FlightNo, a.AirlineName, f.DepartureTime ,des.CityName AS DestinationCity, f.ArrivalTime ,dep.CityName AS DepartureCity
+		FROM `flightsupply` f
+		JOIN `airline` a ON a.AirlineId = f.AirlineId
+		JOIN `city` dep ON dep.CityId = f.DepartureCityId 
+		JOIN `city` des ON des.CityId = f.DestinationCityId
+         ORDER BY FlightId, FlightNo, AirlineName, DepartureTime, DestinationCity, ArrivalTime, DepartureCity;
+		
+    ELSE
+		IF $FlightNo ="" THEN
+			SET $FlightNo ="@@@@";
+		END IF;
+		IF $AirlineName = "" THEN
+			SET $AirlineName = "@@@@";
+		END IF;
+		IF $DestinationCity = "" THEN
+			SET	$DestinationCity = "@@@@";
+		END IF;
+		IF $DepartureCity = "" THEN
+			SET $DepartureCity = "@@@@";
+		END IF;
+		SELECT f.FlightId, f.FlightNo, a.AirlineName, f.DepartureTime ,des.CityName AS DestinationCity, f.ArrivalTime ,dep.CityName AS DepartureCity
+		FROM `flightsupply` f
+		JOIN `airline` a ON a.AirlineId = f.AirlineId
+		JOIN `city` dep ON dep.CityId = f.DepartureCityId 
+		JOIN `city` des ON des.CityId = f.DestinationCityId
+		WHERE f.FlightNo LIKE CONCAT("%",$FlightNo,"%")
+		OR a.AirlineName LIKE CONCAT("%",$AirlineName,"%")
+		OR DestinationCity LIKE CONCAT("%",$DestinationCity,"%")
+		OR DepartureCity LIKE CONCAT("%",$DepartureCity,"%")
+		ORDER BY FlightId, FlightNo, AirlineName, DepartureTime, DestinationCity, ArrivalTime, DepartureCity;
+		
+	END IF;
+
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_filterGender` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_filterGender`($Gender VARCHAR(8))
+BEGIN
+	IF $Gender = "" THEN
+    
+		SELECT * FROM `gender`
+        ORDER BY `GenderId`;
+    
+    ELSE
+    
+		SELECT * FROM `gender`
+		WHERE `Gender` LIKE CONCAT("%",$Gender,"%");
+        
+	END IF;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `sp_filterIdentification` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -973,6 +1481,100 @@ BEGIN
 	SELECT*FROM`Identification`
     WHERE `DocumentName` LIKE CONCAT('%',$DocumentName,'%')
     ORDER BY IdentificationId ASC;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_filterPassengerManifest` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_filterPassengerManifest`($BookingClass VARCHAR(100), $Price DECIMAL(10,2), $CurrencyName VARCHAR(3), $IdentificationName VARCHAR(100), $PassengerName VARCHAR(100), $Gender VARCHAR(8))
+BEGIN
+
+	IF   ($BookingClass = "" AND ($Price IS NULL AND ($CurrencyName = "" AND ($IdentificationName = "" AND ($PassengerName = "" AND $Gender =""))))) THEN      
+    
+		SELECT p.PassengerId,p.PassengerName, b.TypeName AS BookingClass, p.Price, c.CurrencyName, i.DocumentName, g.Gender
+		FROM `passengermanifest` p 
+		JOIN `bookingclass` b ON b.BookingClassId = p.Booking_Class_Id
+		JOIN `currency` c ON c.CurrencyId = p.Currency_Id_
+		JOIN `identification` i ON i.IdentificationId = p.IdentificationId
+		JOIN `Gender` g ON g.GenderId = p.GenderId
+        ORDER BY PassengerId, PassengerName, Gender,BookingClass, Price, CurrencyName, DocumentName;
+    
+    ELSE
+		IF $BookingClass = "" THEN
+			SET $BookingClass = "@@@@";
+		END IF;
+		IF $Price IS NULL THEN
+			SET $Price = 0.00;
+		END IF;
+		IF $CurrencyName = "" THEN
+			SET $CurrencyName = "@@@";
+		END IF;
+		IF $IdentificationName = "" THEN
+			SET $IdentificationName = "@@@@";
+		END IF;
+		IF $PassengerName = "" THEN
+			SET $PassengerName = "@@@@";
+		END IF;
+		IF $Gender ="" THEN
+			SET $Gender = "@@@@";
+		END IF;
+		SELECT p.PassengerId,p.PassengerName, b.TypeName AS BookingClass, p.Price, c.CurrencyName, i.DocumentName, g.Gender
+		FROM `passengermanifest` p 
+		JOIN `bookingclass` b ON b.BookingClassId = p.Booking_Class_Id
+		JOIN `currency` c ON c.CurrencyId = p.Currency_Id_
+		JOIN `identification` i ON i.IdentificationId = p.IdentificationId
+		JOIN `Gender` g ON g.GenderId = p.GenderId
+		WHERE b.TypeName LIKE CONCAT("%",$BookingClass,"%")
+		OR p.Price LIKE CONCAT("%", CAST($Price AS CHAR),"%")
+		OR c.CurrencyName LIKE CONCAT("%",$CurrencyName,"%")
+		OR i.DocumentName LIKE CONCAT("%",$IdentificationName,"%")
+		OR p.PassengerName LIKE CONCAT("%",$PassengerName,"%")
+		OR g.Gender LIKE CONCAT("%",$Gender,"%")
+		ORDER BY PassengerId, PassengerName, Gender,BookingClass, Price, CurrencyName, DocumentName;
+	END IF;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_filterPaymentMethod` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_filterPaymentMethod`($PaymentType VARCHAR(100))
+BEGIN
+
+	IF $PaymentType = "" THEN
+    
+		SELECT * FROM `paymentmethod`
+        ORDER BY `PaymentMethodId`;
+    
+    ELSE
+    
+		SELECT * FROM `paymentmethod`
+		WHERE `PaymentType` LIKE CONCAT("%",$PaymentType,"%")
+		ORDER BY `PaymentMethodId`;
+        
+	END IF;
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1033,11 +1635,77 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_getBooking`($BookingId INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_getBooking`()
 BEGIN
 
 	SELECT * FROM `Booking`
-    WHERE `BookingId` = $BookingId;
+    ORDER BY `BookingId`;
+    
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_getBookingClass` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_getBookingClass`()
+BEGIN
+
+	SELECT * FROM `bookingclass`
+    ORDER BY `BookingClassId`;
+    
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_getBookingSupply` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_getBookingSupply`()
+BEGIN
+
+	SELECT * FROM `bookingsupply`
+    ORDER BY `BookingSupplyId`;
+
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_getBookingType` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_getBookingType`()
+BEGIN
+
+	SELECT * FROM `bookingtype`
+    ORDER BY `BookingTypeId`;
     
 END ;;
 DELIMITER ;
@@ -1118,10 +1786,10 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_getCurrency`( $CurrencyId INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_getCurrency`( )
 BEGIN
 	SELECT * FROM `Currency`
-    WHERE `CurrencyId` = $CurrencyId;
+    ORDER BY CurrencyName;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1138,10 +1806,31 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_getFlightSupply`( $FlightId INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_getFlightSupply`( )
 BEGIN
 	SELECT * FROM `FlightSupply`
     WHERE `FlightId` = $FlightId;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_getGender` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_getGender`()
+BEGIN
+
+	SELECT * FROM `gender`
+    ORDER BY `Gender`;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1170,7 +1859,7 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP PROCEDURE IF EXISTS `sp_procedure` */;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_getPassengerManifest` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -1180,31 +1869,34 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_procedure`(
-
-	$CityId INT,
-    $CityName VARCHAR(100),
-    $CountryId INT
-)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_getPassengerManifest`()
 BEGIN
 
-	IF $CityId = 0 THEN
-		IF NOT EXISTS(SELECT * FROM `City` WHERE `CityName` = $CityName) THEN
-			
-            INSERT INTO `City` (`CityName`,`CountryId`)
-            VALUES($CityName, $CountryId);
-        
-        END IF;
-	ELSE
-		IF NOT EXISTS(SELECT * FROM `City` WHERE `CityName` = $CityName AND `CityId` != $CityId) THEN 
-			UPDATE `City`
-            SET `CityName` = $CityName,
-				`CountryId` = $CountryId
-			WHERE `CityId` = $CityId;
-		END IF;
-		
+	SELECT * FROM `passengermanifest`
+    ORDER BY `PassengerId`;
     
-    END IF;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_getPaymentMethod` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_getPaymentMethod`()
+BEGIN
+
+	SELECT * FROM `paymentmethod`
+    ORDER BY `PaymentMethodId`;
+    
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -1344,12 +2036,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_saveBookingClass`(
-
-	$BookingClassId INT,
-    $TypeName VARCHAR(100)
-
-)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_saveBookingClass`($BookingClassId INT,$TypeName VARCHAR(100))
 BEGIN
 
 	IF $BookingClassId = 0 THEN 
@@ -1427,11 +2114,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_saveBookingType`(
-
-	$BookingTypeId INT,
-    $BookingName VARCHAR(100)
-)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_saveBookingType`($BookingTypeId INT,$BookingName VARCHAR(100))
 BEGIN
 
 	IF $BookingTypeId = 0 THEN
@@ -1533,13 +2216,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_saveCurrency`(
-
-	$CurrencyId INT,
-    $CurrencyName VARCHAR(3),
-    $DefaultCurrency VARCHAR(3),
-    $ExchangeRate INT
-)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_saveCurrency`($CurrencyId INT,$CurrencyName VARCHAR(3),$DefaultCurrency VARCHAR(3),$ExchangeRate INT)
 BEGIN
 
 	IF $CurrencyId = 0 THEN
@@ -1626,11 +2303,7 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_saveGender`(
-
-	$GenderId INT,
-    $Gender VARCHAR(8)
-)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_saveGender`($GenderId INT,$Gender VARCHAR(8))
 BEGIN
 
 
@@ -1801,4 +2474,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-08-20 15:54:02
+-- Dump completed on 2025-09-06 22:31:06
