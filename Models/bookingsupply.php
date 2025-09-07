@@ -41,7 +41,7 @@
         }
 
 
-        function deleteBookingSupply(){
+        function deleteBookingSupply($BookingSupplyId){
 
             $sql = "CALL `sp_deleteBookingSupply`({$BookingSupplyId})";
             $this->getData($sql);

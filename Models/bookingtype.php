@@ -40,7 +40,7 @@
 
         }
 
-        function deleteBookingType(){
+        function deleteBookingType($BookingTypeId){
 
             $sql = "CALL `sp_deleteBookingType`({$BookingTypeId})";
             $this->getData($sql);

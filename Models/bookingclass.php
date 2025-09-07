@@ -7,7 +7,7 @@
         function checkBookingClass($BookingClassId, $TypeName){
 
             $sql = "CALL `sp_checkBookingClass`({$BookingClassId}, '{$TypeName}')";
-            $this->getData($sql)->rowCount();
+            return $this->getData($sql)->rowCount();
         }
 
         function saveBookingClass($BookingClassId, $TypeName){
@@ -19,7 +19,7 @@
             } else {
 
             $sql="CALL `sp_saveBookingClass`({$BookingClassId},'{$TypeName}')";
-            $this-getData($sql);
+            $this->getData($sql);
             return ["status"=>"success", "message" => "The Booking type was saved successfully"];
             
             }

@@ -42,7 +42,7 @@
 
         }
 
-        function deletePassengerManifest(){
+        function deletePassengerManifest($PassengerId){
 
             $sql = "CALL `sp_deletePassengerManifest`({$PassengerId})";
             $this->getData($sql);

@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `expediaflightbooking` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `expediaflightbooking`;
 -- MySQL dump 10.13  Distrib 8.0.43, for Win64 (x86_64)
 --
 -- Host: localhost    Database: expediaflightbooking
@@ -118,7 +120,7 @@ CREATE TABLE `bookingclass` (
   `BookingClassId` int NOT NULL AUTO_INCREMENT,
   `TypeName` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`BookingClassId`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -127,6 +129,7 @@ CREATE TABLE `bookingclass` (
 
 LOCK TABLES `bookingclass` WRITE;
 /*!40000 ALTER TABLE `bookingclass` DISABLE KEYS */;
+INSERT INTO `bookingclass` VALUES (6,'Economy Class'),(7,'First Class');
 /*!40000 ALTER TABLE `bookingclass` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -174,7 +177,7 @@ CREATE TABLE `bookingtype` (
   `BookingTypeId` int NOT NULL AUTO_INCREMENT,
   `BookingName` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`BookingTypeId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -183,6 +186,7 @@ CREATE TABLE `bookingtype` (
 
 LOCK TABLES `bookingtype` WRITE;
 /*!40000 ALTER TABLE `bookingtype` DISABLE KEYS */;
+INSERT INTO `bookingtype` VALUES (1,'Full Price'),(2,'Discounted');
 /*!40000 ALTER TABLE `bookingtype` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -285,7 +289,7 @@ CREATE TABLE `flightsupply` (
   CONSTRAINT `AirlineId` FOREIGN KEY (`AirlineId`) REFERENCES `airline` (`AirlineId`),
   CONSTRAINT `DepartureCityId` FOREIGN KEY (`DepartureCityId`) REFERENCES `city` (`CityId`),
   CONSTRAINT `DestinationCityId` FOREIGN KEY (`DestinationCityId`) REFERENCES `city` (`CityId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -294,6 +298,7 @@ CREATE TABLE `flightsupply` (
 
 LOCK TABLES `flightsupply` WRITE;
 /*!40000 ALTER TABLE `flightsupply` DISABLE KEYS */;
+INSERT INTO `flightsupply` VALUES (1,'KQ204',5,'2025-09-07 21:30:00',11,'2025-09-07 22:30:00',10),(3,'KQ482',5,'2025-09-07 02:10:00',11,'2025-09-07 03:35:00',9);
 /*!40000 ALTER TABLE `flightsupply` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -396,7 +401,7 @@ CREATE TABLE `paymentmethod` (
   `PaymentMethodId` int NOT NULL AUTO_INCREMENT,
   `PaymentType` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`PaymentMethodId`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -405,13 +410,9 @@ CREATE TABLE `paymentmethod` (
 
 LOCK TABLES `paymentmethod` WRITE;
 /*!40000 ALTER TABLE `paymentmethod` DISABLE KEYS */;
-INSERT INTO `paymentmethod` VALUES (1,'Cash');
+INSERT INTO `paymentmethod` VALUES (1,'Cash'),(2,'Mpesa');
 /*!40000 ALTER TABLE `paymentmethod` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Dumping events for database 'expediaflightbooking'
---
 
 --
 -- Dumping routines for database 'expediaflightbooking'
@@ -431,28 +432,6 @@ BEGIN
 
 	SELECT * FROM `flightsupply`
     WHERE `FlightId` != $FlightId AND `FlightNo` = $FlightNo ;
-    
-END ;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP PROCEDURE IF EXISTS `sp_BookingType` */;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_BookingType`($BookingTypeId INT, $BookingName VARCHAR(100))
-BEGIN
-
-	SELECT * FROM `bookingtype`
-    WHERE `BookingTypeId` != $BookingTypeId AND `BookingName` = $BookingName;
     
 END ;;
 DELIMITER ;
@@ -652,6 +631,28 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `sp_checkFlightSupply` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_checkFlightSupply`($FlightId INT, $FlightNo VARCHAR(100))
+BEGIN
+
+	SELECT * FROM `flightsupply`
+    WHERE `FlightId` != $FlightId AND `FlightNo` = $FlightNo ;
+    
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!50003 DROP PROCEDURE IF EXISTS `sp_checkGender` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -815,7 +816,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_deleteBookingClass`( $BookingCla
 BEGIN
 
 	DELETE FROM `BookingClass`
-    WHERE `BookingClassId` = BookingClassId;
+    WHERE `BookingClassId` = $BookingClassId;
 
 END ;;
 DELIMITER ;
@@ -1417,16 +1418,16 @@ BEGIN
 		IF $DepartureCity = "" THEN
 			SET $DepartureCity = "@@@@";
 		END IF;
-		SELECT f.FlightId, f.FlightNo, a.AirlineName, f.DepartureTime ,des.CityName AS DestinationCity, f.ArrivalTime ,dep.CityName AS DepartureCity
+		SELECT f.FlightId, f.FlightNo, a.AirlineName,dep.CityName AS DepartureCity, f.DepartureTime ,des.CityName AS DestinationCity, f.ArrivalTime
 		FROM `flightsupply` f
 		JOIN `airline` a ON a.AirlineId = f.AirlineId
 		JOIN `city` dep ON dep.CityId = f.DepartureCityId 
 		JOIN `city` des ON des.CityId = f.DestinationCityId
 		WHERE f.FlightNo LIKE CONCAT("%",$FlightNo,"%")
 		OR a.AirlineName LIKE CONCAT("%",$AirlineName,"%")
-		OR DestinationCity LIKE CONCAT("%",$DestinationCity,"%")
-		OR DepartureCity LIKE CONCAT("%",$DepartureCity,"%")
-		ORDER BY FlightId, FlightNo, AirlineName, DepartureTime, DestinationCity, ArrivalTime, DepartureCity;
+		OR des.CityName LIKE CONCAT("%",$DestinationCity,"%")
+		OR dep.CityName LIKE CONCAT("%",$DepartureCity,"%")
+		ORDER BY FlightId, FlightNo, AirlineName, DepartureCity, DepartureTime, DestinationCity, ArrivalTime;
 		
 	END IF;
 
@@ -1809,7 +1810,7 @@ DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_getFlightSupply`( )
 BEGIN
 	SELECT * FROM `FlightSupply`
-    WHERE `FlightId` = $FlightId;
+    ORDER BY `FlightNo`;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -2272,7 +2273,7 @@ BEGIN
 
 	IF $FlightId = 0 THEN
     
-		INSERT INTO `FlightSupply` (`FlightNo`,`AirlineId`,`DepartureTime`,`DepartureCityId`,`ArrivalTime`,`DestinationCityId `)
+		INSERT INTO `FlightSupply` (`FlightNo`,`AirlineId`,`DepartureTime`,`DepartureCityId`,`ArrivalTime`,`DestinationCityId`)
         VALUES($FlightNo,$AirlineId,$DepartureTime,$DepartureCityId,$ArrivalTime,$DestinationCityId);
     
     ELSE
@@ -2474,4 +2475,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-09-06 22:31:06
+-- Dump completed on 2025-09-07 23:03:17
