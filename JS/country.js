@@ -6,8 +6,12 @@ $(document).ready(function(){
         countrynamefield = $("#CountryName"),
         savecountrybutton = $("#saveCountry"),
         notifications = $("#notifications"),
-        closebutton = $("#closemodal")
+        closebutton = $("#closemodal"),
+        countriestable = $("#countrytable"),
+        countrynotifications = $("#countrynotifications")
         
+    //Load existing countries 
+    getCountriesAsTable()
 
     addnewcountrybutton.on("click",function(){
         countrymodal.modal("show")
@@ -43,6 +47,8 @@ $(document).ready(function(){
                             notifications.html("<div class='alert alert-success' role='alert' >Country saved successfully.</div>")
                             countrynamefield.val("")
                             countrynamefield.focus()
+                            //Refresh the countries table
+                            getCountriesAsTable()
  
 
                         }else if(data.status == "exists"){
@@ -87,6 +93,51 @@ $(document).ready(function(){
         }
     }
  
+
+
+    function getCountriesAsTable(){
+
+        $.get(
+            "Controllers/countryoperations.php",
+            {
+                getCountry:true
+            }
+        ).done(function(data){
+
+            //Try to parse if data is in JSON format 
+            let countries;
+            if (typeof data === "string") {
+                try {
+                    countries = JSON.parse(data);
+                } catch (e) {
+                    countrynotifications.html(`<div class='alert alert-danger' role='alert'>Invalid data format: ${data}</div>`);
+                    return;
+                }
+            } else {
+                countries = data;
+            }
+
+
+            let results = "";
+            countries.forEach(function(country,i){
+                results += `<tr> <td>${i+1} </td>`
+                results += `<td>${country.countryname} </td>`
+                results += `<td>${country.cities} </td>`
+                results += `<td>${country.airports} </td>`
+                results += `<td>${country.airlines} </td>`
+                results += `<td><a href = "#"><i class= "fas fa-edit fa-lg"></i></a></td></tr>`
+            })
+
+            //Done with looping throught the data that is returned
+            countriestable.find("tbody").html(results);
+
+        }).fail(function(response,status,error){
+
+            console.log(`Sorry an error occured ${response.responseText}`);
+            countrynotifications.html(`<div class='alert alert-danger' role='alert'> An error occured ${response.responseText} </div>`)
+
+        })
+    }
 
 
 })
