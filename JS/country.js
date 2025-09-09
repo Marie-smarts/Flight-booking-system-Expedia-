@@ -48,7 +48,7 @@ $(document).ready(function(){
                             countrynamefield.val("")
                             countrynamefield.focus()
                             //Refresh the countries table
-                            getCountriesAsTable()
+                            
  
 
                         }else if(data.status == "exists"){
@@ -97,31 +97,17 @@ $(document).ready(function(){
 
     function getCountriesAsTable(){
 
-        $.get(
+        $.getJSON(
             "Controllers/countryoperations.php",
             {
                 getCountry:true
             }
         ).done(function(data){
 
-            //Try to parse if data is in JSON format 
-            let countries;
-            if (typeof data === "string") {
-                try {
-                    countries = JSON.parse(data);
-                } catch (e) {
-                    countrynotifications.html(`<div class='alert alert-danger' role='alert'>Invalid data format: ${data}</div>`);
-                    return;
-                }
-            } else {
-                countries = data;
-            }
-
-
             let results = "";
-            countries.forEach(function(country,i){
+            data.forEach(function(country,i){
                 results += `<tr> <td>${i+1} </td>`
-                results += `<td>${country.countryname} </td>`
+                results += `<td>${country.CountryName} </td>`
                 results += `<td>${country.cities} </td>`
                 results += `<td>${country.airports} </td>`
                 results += `<td>${country.airlines} </td>`
