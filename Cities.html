@@ -16,15 +16,90 @@
             </div>
 
             <div class="card-body">
+                <div id="filtercitynotifications"></div>
                 <div class="row">
                     <div class="col form-group">
                         <label for="filtercountry">Country</label>
-                        <select name="filtercountry" id="filtercountry" class="form-control form-control-sm"></select>
+                        <select name="filtercountry" id="filtercountry" class="form-select form-select-sm"></select>
+                    </div>
+
+
+                    <div class="col form-group">
+
+                        <label for="filtercityname">City Name</label>
+
+                        <div class="input-group">
+                            <input type="text" name="" id="filtercityname" class="form-control form-control-sm">
+                            <div class="input-group-append">
+                              
+                                <button class="btn btn-success btn-sm" id="searchcities">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                      
                     </div>
                 </div>
+
+
+                <table class="table table-sm table-striped" id="citytable">
+                    <thead>
+                        <th>#</th>
+                        <th>Country</th>
+                        <th>City Name</th>
+                        <th>Airports</th>
+                        <th>Airlines</th>
+                        <th></th><!--Edit button goes here-->
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <button id="AddNewCity" class="btn btn-success btn-sm">
+                    <i class="fas fa-plus"></i>
+                    Add New City
+                </button>
             </div>
         </div>
     </div>
     
+    <!--This is modal for city details-->
+    <div class="modal" tabindex="-1" role="dialog" id="cityDetailsModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+            </div>
+            <div class="modal-body">
+                <div id="citydetailsnotifications"></div>
+                <input type="hidden" name="cityid" id="cityid" value="0">
+                <div class="form-group">
+                    <label for="citydetailscountry">Country</label>
+                    <select name="citydetailscountry" id="citydetailscountry" class="form-select form-select-sm"></select>
+                </div>
+
+                <div class="form-group">
+                    <label for="citydetailscityname">City Name</label>
+                    <input type="text" name="citydetailscityname" id="citydetailscityname" class="form-control form-control-sm">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success btn-sm" id="saveCity">
+                    <i class="fas fa-save fa-sm"></i>
+                    Save changes
+                </button>
+                <button type="button" class="btn btn-outline-danger btn-sm" data-dismiss="modal" id="closeCityDetailsModal">
+                    <i class="fas fa-close fa-sm"></i>
+                    Close
+                </button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+
+    
 </body>
+
+    <script src="JS/jquery-3.7.1.js"></script>
+    <script src="JS/bootstrap.min.js"></script>
+    <script src="JS/cities.js"></script>
 </html>

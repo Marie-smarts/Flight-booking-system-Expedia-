@@ -48,6 +48,7 @@ $(document).ready(function(){
                             countrynamefield.val("")
                             countrynamefield.focus()
                             //Refresh the countries table
+                            getCountriesAsTable()
                             
  
 
@@ -67,6 +68,7 @@ $(document).ready(function(){
                 }
             )
         }
+
     })
 
     countrynamefield.on("input",function(){
