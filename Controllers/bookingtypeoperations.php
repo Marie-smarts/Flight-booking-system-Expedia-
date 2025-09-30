@@ -1,38 +1,82 @@
 <?php
+require_once '../Models/bookingtype.php';
+$bookingtype = new BookingType();
 
-    require_once("../Models/bookingtype.php");
-    $bookingtype = new bookingtype();
+// Always return JSON
+header('Content-Type: application/json');
 
-    if(isset($_POST['saveBookingType'])){
+/**
+ * Helper: send JSON response and exit
+ */
+function respond($status, $data = null, $message = '') {
+    echo json_encode([
+        'status'  => $status,
+        'data'    => $data,
+        'message' => $message
+    ]);
+    exit;
+}
 
-        $BookingTypeId = $_POST['BookingTypeId'];
-        $BookingName = $_POST['BookingName'];
+// Handle saving booking type
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['saveBookingType'])) {
+    $BookingTypeId = $_POST['BookingTypeId'] ?? null;
+    $BookingName   = trim($_POST['BookingName'] ?? '');
 
-        $response = $bookingtype->saveBookingType($BookingTypeId,$BookingName);
-        echo json_encode($response);
+    if (!$BookingName) {
+        respond('error', null, 'Booking Name is required');
     }
 
-    if(isset($_GET['getBookingType'])){
+    try {
+        $response = $bookingtype->saveBookingType($BookingTypeId, $BookingName);
+        respond('success', $response, 'Booking Type saved successfully');
+    } catch (Throwable $e) {
+        http_response_code(500);
+        respond('error', null, $e->getMessage());
+    }
+}
 
-        echo $bookingtype->getBookingType();
+// Handle getting all booking types
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['getBookingType'])) {
+    try {
+        $response = $bookingtype->getBookingType();
+        respond('success', $response);
+    } catch (Throwable $e) {
+        http_response_code(500);
+        respond('error', null, $e->getMessage());
+    }
+}
 
+// Handle filtering booking types
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['filterBookingType'])) {
+    $BookingName = trim($_GET['BookingName'] ?? '');
+
+    try {
+        $response = $bookingtype->filterBookingType($BookingName);
+        respond('success', $response);
+    } catch (Throwable $e) {
+        http_response_code(500);
+        respond('error', null, $e->getMessage());
+    }
+}
+
+// Handle deleting booking type
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deleteBookingType'])) {
+    $BookingTypeId = $_POST['BookingTypeId'] ?? null;
+
+    if (!$BookingTypeId) {
+        respond('error', null, 'Booking Type ID is required');
     }
 
-    if(isset($_GET['filterBookingType'])){
-
-        $BookingName = $_GET['BookingName'];
-        echo $bookingtype->filterBookingType($BookingName);
-
-    }
-
-    if(isset($_POST['deleteBookingType'])){
-
-        $BookingTypeId = $_POST['BookingTypeId'];
+    try {
         $response = $bookingtype->deleteBookingType($BookingTypeId);
-        echo json_encode($response);
-
+        respond('success', $response, 'Booking Type deleted successfully');
+    } catch (Throwable $e) {
+        http_response_code(500);
+        respond('error', null, $e->getMessage());
     }
+}
 
+// Fallback for invalid requests
+http_response_code(400);
+respond('error', null, 'Invalid request');
 
-
-?>
